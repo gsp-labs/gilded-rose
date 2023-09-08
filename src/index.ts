@@ -17,6 +17,7 @@ export class GildedRose {
         this.items[i].name != "Aged Brie" &&
         this.items[i].name != "Backstage passes to a TAFKAL80ETC concert"
       ) {
+        console.log("Here 1");
         if (this.items[i].quality > 0) {
           if (this.items[i].name != "Sulfuras, Hand of Ragnaros") {
             this.items[i].quality = this.items[i].quality - 1;

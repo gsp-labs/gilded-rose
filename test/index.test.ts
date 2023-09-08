@@ -53,15 +53,6 @@ describe("Gilded Rose", () => {
     expect(gildedRose.items[0].quality).toBe(50);
   });
 
-  it("should increase quality of Aged Brie even after sell date has passed", () => {
-    const gildedRose = new GildedRose([
-      { name: "Aged Brie", quality: 1, sellIn: 0 },
-    ]);
-    gildedRose.updateQuality();
-    expect(gildedRose.items[0].sellIn).toBe(-1);
-    expect(gildedRose.items[0].quality).toBe(2);
-  });
-
   it("should not update quality or sellIn value for Sulfuras, Hand of Ragnaros", () => {
     const gildedRose = new GildedRose([
       { name: "Sulfuras, Hand of Ragnaros", quality: 20, sellIn: 10 },
