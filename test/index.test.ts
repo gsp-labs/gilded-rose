@@ -113,4 +113,59 @@ describe("Gilded Rose", () => {
     expect(gildedRose.items[0].sellIn).toBe(-1);
     expect(gildedRose.items[0].quality).toBe(0);
   });
+
+  it('should update the quality of all the items', () => {
+    const gildedRose = new GildedRose([
+      {
+        name: "Aged Brie",
+        quality: 20,
+        sellIn: 9,
+      },
+      {
+        name: "Backstage passes to a TAFKAL80ETC concert",
+        quality: 20,
+        sellIn: 5,
+      },
+      {
+        name: "Sulfuras, Hand of Ragnaros",
+        quality: 15,
+        sellIn: 3,
+      },
+      {
+        name: "+5 Dexterity Vest",
+        quality: 4,
+        sellIn: 0,
+      },
+      {
+        name: "Backstage passes to a TAFKAL80ETC concert",
+        quality: 7,
+        sellIn: 9,
+      },
+      {
+        name: "Aged Brie",
+        quality: 10,
+        sellIn: 8,
+      },
+      {
+        name: "Sulfuras, Hand of Ragnaros",
+        quality: 48,
+        sellIn: 10,
+      },
+    ]);
+    gildedRose.updateQuality();
+    expect(gildedRose.items[0].sellIn).toBe(8);
+    expect(gildedRose.items[0].quality).toBe(21);
+    expect(gildedRose.items[1].sellIn).toBe(4);
+    expect(gildedRose.items[1].quality).toBe(23);
+    expect(gildedRose.items[2].sellIn).toBe(3);
+    expect(gildedRose.items[2].quality).toBe(15);
+    expect(gildedRose.items[3].sellIn).toBe(-1);
+    expect(gildedRose.items[3].quality).toBe(2);
+    expect(gildedRose.items[4].sellIn).toBe(8);
+    expect(gildedRose.items[4].quality).toBe(9);
+    expect(gildedRose.items[5].sellIn).toBe(7);
+    expect(gildedRose.items[5].quality).toBe(11);
+    expect(gildedRose.items[6].sellIn).toBe(10);
+    expect(gildedRose.items[6].quality).toBe(48);
+  });
 });
