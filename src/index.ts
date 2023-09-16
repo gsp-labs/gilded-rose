@@ -25,9 +25,9 @@ export class GildedRose {
     return item.quality - 1;
   }
 
-  increaseQuality(item: Item) {
-    if (item.quality >= MAXIMUM_QUALITY) return item.quality;
-    return item.quality + 1;
+  increaseQuality(item: Item, increaseBy: number = 1) {
+    if (item.quality + increaseBy >= MAXIMUM_QUALITY) return MAXIMUM_QUALITY;
+    return item.quality + increaseBy;
   }
 
   getQualityForExpiredItem(item: Item): number {
@@ -47,10 +47,10 @@ export class GildedRose {
   getQualityForBackstagePass(item: Item): number {
     if (item.categoryName == CATEGORY_BACKSTAGE_PASSES) {
       if (item.sellIn <= BACKSTAGE_PASSES_L2) {
-        return item.quality + 3;
+        return this.increaseQuality(item, 3);
       }
       if (item.sellIn <= BACKSTAGE_PASSES_L1) {
-        return item.quality + 2;
+        return this.increaseQuality(item, 2);
       }
     }
     return this.increaseQuality(item);

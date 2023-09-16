@@ -101,6 +101,19 @@ describe("Gilded Rose", () => {
     expect(gildedRose.items[0].quality).toBe(23);
   });
 
+  it("should increase quality upto 50 for Backstage passes to a TAFKAL80ETC when there are 5 days or less", () => {
+    const gildedRose = new GildedRose([
+      {
+        categoryName: "Backstage passes to a TAFKAL80ETC concert",
+        quality: 49,
+        sellIn: 5,
+      },
+    ]);
+    gildedRose.updateQuality();
+    expect(gildedRose.items[0].sellIn).toBe(4);
+    expect(gildedRose.items[0].quality).toBe(50);
+  });
+
   it("should drop the quality to 0 after the concert for Backstage passes to a TAFKAL80ETC concert", () => {
     const gildedRose = new GildedRose([
       {
