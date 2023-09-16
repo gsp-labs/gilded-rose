@@ -29,25 +29,21 @@ export class GildedRose {
   }
 
   getQualityForExpiredItem(item: Item): number {
-    if (item.sellIn < 0) {
-      if (item.categoryName === CATEGORY_BACKSTAGE_PASSES) {
-        return MINIMUM_QUALITY;
-      } else {
-        if (
-          item.quality > MINIMUM_QUALITY &&
-          item.categoryName != CATEGORY_SULFARAS
-        ) {
-          return this.decreaseQuality(item);
-        }
-      }
+    if (item.sellIn < 0) return item.quality;
 
-      if (
-        item.categoryName === CATEGORY_AGED_BRIE &&
-        item.quality < MAXIMUM_QUALITY
-      ) {
-        return this.increaseQuality(item);
-      }
-    }
+    if (item.categoryName === CATEGORY_BACKSTAGE_PASSES) return MINIMUM_QUALITY;
+
+    if (
+      item.quality > MINIMUM_QUALITY &&
+      item.categoryName != CATEGORY_SULFARAS
+    )
+      return this.decreaseQuality(item);
+
+    if (
+      item.categoryName === CATEGORY_AGED_BRIE &&
+      item.quality < MAXIMUM_QUALITY
+    )
+      return this.increaseQuality(item);
 
     return item.quality;
   }
