@@ -28,6 +28,30 @@ export class GildedRose {
     return item.quality + 1;
   }
 
+  getQualityForExpiredItem(item: Item): number {
+    if (item.sellIn < 0) {
+      if (item.categoryName === CATEGORY_BACKSTAGE_PASSES) {
+        return MINIMUM_QUALITY;
+      } else {
+        if (
+          item.quality > MINIMUM_QUALITY &&
+          item.categoryName != CATEGORY_SULFARAS
+        ) {
+          return this.decreaseQuality(item);
+        }
+      }
+
+      if (
+        item.categoryName === CATEGORY_AGED_BRIE &&
+        item.quality < MAXIMUM_QUALITY
+      ) {
+        return this.increaseQuality(item);
+      }
+    }
+
+    return item.quality;
+  }
+
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
       if (
@@ -61,25 +85,7 @@ export class GildedRose {
         this.items[i].sellIn = this.items[i].sellIn - 1;
       }
 
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].categoryName === CATEGORY_BACKSTAGE_PASSES) {
-          this.items[i].quality = MINIMUM_QUALITY;
-        } else {
-          if (
-            this.items[i].quality > MINIMUM_QUALITY &&
-            this.items[i].categoryName != CATEGORY_SULFARAS
-          ) {
-            this.items[i].quality = this.decreaseQuality(this.items[i]);
-          }
-        }
-
-        if (
-          this.items[i].categoryName === CATEGORY_AGED_BRIE &&
-          this.items[i].quality < MAXIMUM_QUALITY
-        ) {
-          this.items[i].quality = this.increaseQuality(this.items[i]);
-        }
-      }
+      this.items[i].quality = this.getQualityForExpiredItem(this.items[i]);
     }
 
     return this.items;
