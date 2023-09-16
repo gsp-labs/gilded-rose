@@ -21,10 +21,12 @@ export class GildedRose {
   }
 
   decreaseQuality(item: Item) {
+    if (item.quality <= MINIMUM_QUALITY) return item.quality;
     return item.quality - 1;
   }
 
   increaseQuality(item: Item) {
+    if (item.quality >= MAXIMUM_QUALITY) return item.quality;
     return item.quality + 1;
   }
 
@@ -33,17 +35,11 @@ export class GildedRose {
 
     if (item.categoryName === CATEGORY_BACKSTAGE_PASSES) return MINIMUM_QUALITY;
 
-    if (
-      item.quality > MINIMUM_QUALITY &&
-      item.categoryName != CATEGORY_SULFARAS
-    )
-      return this.decreaseQuality(item);
-
-    if (
-      item.categoryName === CATEGORY_AGED_BRIE &&
-      item.quality < MAXIMUM_QUALITY
-    )
+    if (item.categoryName === CATEGORY_AGED_BRIE)
       return this.increaseQuality(item);
+
+    if (item.categoryName != CATEGORY_SULFARAS)
+      return this.decreaseQuality(item);
 
     return item.quality;
   }
@@ -53,25 +49,17 @@ export class GildedRose {
       item.categoryName != CATEGORY_AGED_BRIE &&
       item.categoryName != CATEGORY_BACKSTAGE_PASSES
     ) {
-      if (item.quality > MINIMUM_QUALITY) {
-        if (item.categoryName != CATEGORY_SULFARAS) {
-          return this.decreaseQuality(item);
-        }
+      if (item.categoryName != CATEGORY_SULFARAS) {
+        return this.decreaseQuality(item);
       }
     } else {
-      if (item.quality < MAXIMUM_QUALITY) {
-        item.quality = this.increaseQuality(item);
-        if (item.categoryName == CATEGORY_BACKSTAGE_PASSES) {
-          if (item.sellIn <= BACKSTAGE_PASSES_L1) {
-            if (item.quality < MAXIMUM_QUALITY) {
-              item.quality = this.increaseQuality(item);
-            }
-          }
-          if (item.sellIn <= BACKSTAGE_PASSES_L2) {
-            if (item.quality < MAXIMUM_QUALITY) {
-              item.quality = this.increaseQuality(item);
-            }
-          }
+      item.quality = this.increaseQuality(item);
+      if (item.categoryName == CATEGORY_BACKSTAGE_PASSES) {
+        if (item.sellIn <= BACKSTAGE_PASSES_L1) {
+          item.quality = this.increaseQuality(item);
+        }
+        if (item.sellIn <= BACKSTAGE_PASSES_L2) {
+          item.quality = this.increaseQuality(item);
         }
       }
     }
