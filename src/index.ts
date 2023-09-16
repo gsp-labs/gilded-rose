@@ -62,22 +62,22 @@ export class GildedRose {
       }
 
       if (this.items[i].sellIn < 0) {
-        if (this.items[i].categoryName != CATEGORY_AGED_BRIE) {
-          if (this.items[i].categoryName != CATEGORY_BACKSTAGE_PASSES) {
-            if (
-              this.items[i].quality > MINIMUM_QUALITY &&
-              this.items[i].categoryName != CATEGORY_SULFARAS
-            ) {
-              this.items[i].quality = this.decreaseQuality(this.items[i]);
-            }
-          } else {
-            this.items[i].quality =
-              this.items[i].quality - this.items[i].quality;
-          }
+        if (this.items[i].categoryName === CATEGORY_BACKSTAGE_PASSES) {
+          this.items[i].quality = MINIMUM_QUALITY;
         } else {
-          if (this.items[i].quality < MAXIMUM_QUALITY) {
-            this.items[i].quality = this.increaseQuality(this.items[i]);
+          if (
+            this.items[i].quality > MINIMUM_QUALITY &&
+            this.items[i].categoryName != CATEGORY_SULFARAS
+          ) {
+            this.items[i].quality = this.decreaseQuality(this.items[i]);
           }
+        }
+
+        if (
+          this.items[i].categoryName === CATEGORY_AGED_BRIE &&
+          this.items[i].quality < MAXIMUM_QUALITY
+        ) {
+          this.items[i].quality = this.increaseQuality(this.items[i]);
         }
       }
     }
