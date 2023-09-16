@@ -44,7 +44,22 @@ export class GildedRose {
     return item.quality;
   }
 
+  getQualityForBackstagePass(item: Item): number {
+    if (item.categoryName == CATEGORY_BACKSTAGE_PASSES) {
+      if (item.sellIn <= BACKSTAGE_PASSES_L2) {
+        return item.quality + 3;
+      }
+      if (item.sellIn <= BACKSTAGE_PASSES_L1) {
+        return item.quality + 2;
+      }
+    }
+    return this.increaseQuality(item);
+  }
   getQualityForNonExpiredItem(item: Item): number {
+    if (item.categoryName === CATEGORY_BACKSTAGE_PASSES) {
+      return this.getQualityForBackstagePass(item);
+    }
+
     if (
       item.categoryName != CATEGORY_AGED_BRIE &&
       item.categoryName != CATEGORY_BACKSTAGE_PASSES
@@ -53,15 +68,7 @@ export class GildedRose {
         return this.decreaseQuality(item);
       }
     } else {
-      item.quality = this.increaseQuality(item);
-      if (item.categoryName == CATEGORY_BACKSTAGE_PASSES) {
-        if (item.sellIn <= BACKSTAGE_PASSES_L1) {
-          item.quality = this.increaseQuality(item);
-        }
-        if (item.sellIn <= BACKSTAGE_PASSES_L2) {
-          item.quality = this.increaseQuality(item);
-        }
-      }
+      return this.increaseQuality(item);
     }
     return item.quality;
   }
