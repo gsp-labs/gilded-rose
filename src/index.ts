@@ -29,7 +29,7 @@ export class GildedRose {
   }
 
   getQualityForExpiredItem(item: Item): number {
-    if (item.sellIn < 0) return item.quality;
+    if (item.sellIn >= 0) return item.quality;
 
     if (item.categoryName === CATEGORY_BACKSTAGE_PASSES) return MINIMUM_QUALITY;
 
@@ -48,34 +48,39 @@ export class GildedRose {
     return item.quality;
   }
 
-  updateQuality() {
-    for (let i = 0; i < this.items.length; i++) {
-      if (
-        this.items[i].categoryName != CATEGORY_AGED_BRIE &&
-        this.items[i].categoryName != CATEGORY_BACKSTAGE_PASSES
-      ) {
-        if (this.items[i].quality > MINIMUM_QUALITY) {
-          if (this.items[i].categoryName != CATEGORY_SULFARAS) {
-            this.items[i].quality = this.decreaseQuality(this.items[i]);
-          }
+  getQualityForNonExpiredItem(item: Item): number {
+    if (
+      item.categoryName != CATEGORY_AGED_BRIE &&
+      item.categoryName != CATEGORY_BACKSTAGE_PASSES
+    ) {
+      if (item.quality > MINIMUM_QUALITY) {
+        if (item.categoryName != CATEGORY_SULFARAS) {
+          return this.decreaseQuality(item);
         }
-      } else {
-        if (this.items[i].quality < MAXIMUM_QUALITY) {
-          this.items[i].quality = this.increaseQuality(this.items[i]);
-          if (this.items[i].categoryName == CATEGORY_BACKSTAGE_PASSES) {
-            if (this.items[i].sellIn <= BACKSTAGE_PASSES_L1) {
-              if (this.items[i].quality < MAXIMUM_QUALITY) {
-                this.items[i].quality = this.increaseQuality(this.items[i]);
-              }
+      }
+    } else {
+      if (item.quality < MAXIMUM_QUALITY) {
+        item.quality = this.increaseQuality(item);
+        if (item.categoryName == CATEGORY_BACKSTAGE_PASSES) {
+          if (item.sellIn <= BACKSTAGE_PASSES_L1) {
+            if (item.quality < MAXIMUM_QUALITY) {
+              item.quality = this.increaseQuality(item);
             }
-            if (this.items[i].sellIn <= BACKSTAGE_PASSES_L2) {
-              if (this.items[i].quality < MAXIMUM_QUALITY) {
-                this.items[i].quality = this.increaseQuality(this.items[i]);
-              }
+          }
+          if (item.sellIn <= BACKSTAGE_PASSES_L2) {
+            if (item.quality < MAXIMUM_QUALITY) {
+              item.quality = this.increaseQuality(item);
             }
           }
         }
       }
+    }
+    return item.quality;
+  }
+
+  updateQuality() {
+    for (let i = 0; i < this.items.length; i++) {
+      this.items[i].quality = this.getQualityForNonExpiredItem(this.items[i]);
 
       if (this.items[i].categoryName != CATEGORY_SULFARAS) {
         this.items[i].sellIn = this.items[i].sellIn - 1;
